@@ -185,7 +185,7 @@ export default {
 };
 ```
 
-to configure vite to use alias  @ instead of complete path add this option the vite.config.js
+### 8. to configure vite to use alias  @ instead of complete path add this option the vite.config.js
 
 ```js
    resolve:{
@@ -193,4 +193,31 @@ to configure vite to use alias  @ instead of complete path add this option the v
         '@':'/resources/js'
        } 
     }
+```
+
+### 9. to make a model with it controller and factories and seeders 
+
+```bash
+php artisan make:model "Name goes here" -a
+```
+
+
+### 10.to allow using routes in react
+
+Ziggy helps by allowing you to generate Laravel route URLs in JavaScript easily.
+
+```bash
+composer require tightenco/ziggy
+```
+add the @routes to the app.blade.php
+Example usage in Inertia with Ziggy routing:
+https://inertiajs.com/routing
+https://github.com/tighten/ziggy
+https://www.youtube.com/watch?v=DpinylMqOqk&list=PL38wFHH4qYZVOnXxcS0NMGGmUsZky6JNG&index=11
+```jsx
+import { useRoute } from "../../../vendor/tightenco/ziggy";
+
+const route = useRoute();
+
+<Link href={route("posts.show", post)}>View Post</Link>
 ```

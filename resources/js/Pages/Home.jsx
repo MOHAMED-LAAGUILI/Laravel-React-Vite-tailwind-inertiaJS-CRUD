@@ -1,32 +1,71 @@
-import Layout from "../Layout/Layout";
+import { Head, Link, usePage } from "@inertiajs/react";
+import { useRoute } from "../../../vendor/tightenco/ziggy";
 
- function Home({name}) {
-    return (
-      <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#1e3c72] to-[#2a5298] dark:from-gray-900 dark:to-gray-800 relative overflow-hidden">
-        <div className="relative max-w-2xl w-full p-10 bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl shadow-lg text-center transition-all duration-300">
-          <h1 className="text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-200 dark:from-gray-300 dark:to-gray-400">
-            Welcome {name} to Your Future 🚀
-          </h1>
-          <p className="mt-4 text-lg text-gray-200 dark:text-gray-300">
-            Build stunning web experiences with Laravel, React, Vite & Inertia.js.
-          </p>
-          <button className="mt-6 px-8 py-3 text-lg font-semibold text-white bg-white/20 border border-white/30 rounded-full shadow-md backdrop-blur-lg transition-all duration-300 hover:bg-white/30 hover:scale-105">
-            Get Started
-          </button>
-  
-          {/* Floating Glass Effects */}
-          <div className="absolute top-[-40px] left-[10%] w-16 h-16 bg-white/10 backdrop-blur-md rounded-full shadow-lg"></div>
-          <div className="absolute bottom-[-60px] right-[15%] w-20 h-20 bg-white/10 backdrop-blur-md rounded-full shadow-lg"></div>
-          <div className="absolute top-[50px] left-[60%] w-14 h-14 bg-white/10 backdrop-blur-md rounded-full shadow-lg"></div>
-          <div className="absolute bottom-[20px] right-[5%] w-24 h-24 bg-white/10 backdrop-blur-md rounded-full shadow-lg"></div>
-          <div className="absolute top-[-30px] right-[40%] w-18 h-18 bg-white/10 backdrop-blur-md rounded-full shadow-lg"></div>
-          <div className="absolute bottom-[80px] left-[30%] w-16 h-16 bg-white/10 backdrop-blur-md rounded-full shadow-lg"></div>
-          <div className="absolute top-[90px] left-[5%] w-22 h-22 bg-white/10 backdrop-blur-md rounded-full shadow-lg"></div>
-          <div className="absolute bottom-[-40px] right-[50%] w-14 h-14 bg-white/10 backdrop-blur-md rounded-full shadow-lg"></div>
+
+
+function Home({ posts }) {
+    const route = useRoute();
+    const {component} = usePage();
+  return (
+    <>
+
+    <Head title={`${component} - LRT  `}/>
+
+      <div className="container mx-auto px-4">
+        {/* Display posts as cards */}
+        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {posts.data.map((post) => (
+            <div
+              key={post.id}
+              className="relative p-6 bg-white/20 backdrop-blur-md rounded-2xl shadow-lg transition-all duration-300 hover:bg-white/30"
+            >
+              <h3 className="text-2xl font-semibold text-gray-200">
+                {new Date(post.created_at).toLocaleString()}
+              </h3>
+              <p className="mt-4 text-lg text-gray-200 dark:text-gray-300">
+                {post.body}
+              </p>
+{/*              
+<Link href={`/posts/${post.id}`} className="text-blue-400 hover:underline">
+                Read More...
+              </Link>
+              */}
+
+              <Link href={route("posts.show", post)}>
+               Read More...
+              </Link>
+
+            </div>
+          ))}
         </div>
-      </main>
-    );
-  }
-  
 
-  export default Home;
+        {/* Pagination Links */}
+        <div className="mt-8 flex flex-wrap justify-center items-center gap-3">
+          {posts.links.map((link) =>
+            link.url ? (
+              <Link
+                key={link.label}
+                href={link.url}
+                className={`px-4 py-2 text-lg font-semibold rounded-full transition-all duration-300 ${
+                  link.active
+                    ? "bg-blue-700 text-white"
+                    : "bg-white text-black hover:bg-blue-600 hover:text-white"
+                }`}
+                dangerouslySetInnerHTML={{ __html: link.label }}
+              />
+            ) : (
+              <span
+                key={link.label}
+                dangerouslySetInnerHTML={{ __html: link.label }}
+                className="text-gray-500 px-4 py-2 text-lg font-semibold rounded-full cursor-not-allowed"
+              ></span>
+            )
+          )}
+        </div>
+   
+      </div>
+    </>
+  );
+}
+
+export default Home;
